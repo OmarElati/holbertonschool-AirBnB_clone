@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ Test suite for Amenity class. """
-
 import unittest
 import models
 from models.amenity import Amenity
