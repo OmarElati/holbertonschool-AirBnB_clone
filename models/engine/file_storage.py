@@ -24,16 +24,13 @@ class FileStorage:
             json.dump(obj_dict, file)
 
     def reload(self):
-        """Deserializes the JSON file to __objects"""
+        """Deserialize the JSON file __file_path to __objects, if it exists."""
         try:
-            with open(FileStorage.__file_path, 'r') as f:
+            with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
-            for key, value in objdict.items():
-                cls_name = value['__class__']
-                module_name = cls_name.split('.')[0]
-                module = __import__('models.' + module_name, fromlist=[module_name])
-                cls = getattr(module, cls_name.split('.')[1])
-                instance = cls(**value)
-                self.new(instance)
+                for o in objdict.values():
+                    cls_name = o["__class__"]
+                    del o["__class__"]
+                    self.new(eval(cls_name)(**o))
         except FileNotFoundError:
             return
