@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import json
-from models import BaseModel
+from models.base_model import BaseModel
 
 
 class FileStorage:
