@@ -18,15 +18,41 @@ class TestAmenity(unittest.TestCase):
         """Test that the instance inherits from BaseModel."""
         self.assertTrue(issubclass(Amenity, models.base_model.BaseModel))
 
-    def test_to_dict(self):
-        """Test if dictionary is correctly formatted."""
-        my_amenity = Amenity()
-        amenity_dict = my_amenity.to_dict()
-        self.assertIsInstance(amenity_dict, dict)
-        self.assertTrue('name' in amenity_dict)
-        self.assertEqual(amenity_dict['__class__'], 'Amenity')
-        self.assertIsInstance(amenity_dict['created_at'], str)
-        self.assertIsInstance(amenity_dict['updated_at'], str)
+class TestAmenity_to_dict(unittest.TestCase):
+    """Unittests for testing to_dict method of the Amenity class."""
+
+    def test_to_dict_type(self):
+        self.assertTrue(dict, type(Amenity().to_dict()))
+
+    def test_to_dict_contains_correct_keys(self):
+        am = Amenity()
+        self.assertIn("id", am.to_dict())
+        self.assertIn("created_at", am.to_dict())
+        self.assertIn("updated_at", am.to_dict())
+        self.assertIn("__class__", am.to_dict())
+
+    def test_to_dict_contains_added_attributes(self):
+        am = Amenity()
+        am.middle_name = "Holberton"
+        am.my_number = 98
+        self.assertEqual("Holberton", am.middle_name)
+        self.assertIn("my_number", am.to_dict())
+
+    def test_to_dict_datetime_attributes_are_strs(self):
+        am = Amenity()
+        am_dict = am.to_dict()
+        self.assertEqual(str, type(am_dict["id"]))
+        self.assertEqual(str, type(am_dict["created_at"]))
+        self.assertEqual(str, type(am_dict["updated_at"]))
+
+    def test_contrast_to_dict_dunder_dict(self):
+        am = Amenity()
+        self.assertNotEqual(am.to_dict(), am.__dict__)
+
+    def test_to_dict_with_arg(self):
+        am = Amenity()
+        with self.assertRaises(TypeError):
+            am.to_dict(None)
 
 
 if __name__ == '__main__':
