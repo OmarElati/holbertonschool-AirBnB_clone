@@ -18,41 +18,40 @@ class TestAmenity(unittest.TestCase):
         """Test that the instance inherits from BaseModel."""
         self.assertTrue(issubclass(Amenity, models.base_model.BaseModel))
 
-class TestAmenity_to_dict(unittest.TestCase):
-    """Unittests for testing to_dict method of the Amenity class."""
+    def test_attributes(self):
+        """Test that the instance has expected attributes."""
+        my_amenity = Amenity()
+        self.assertTrue(hasattr(my_amenity, 'name'))
+        self.assertEqual(my_amenity.name, '')
 
-    def test_to_dict_type(self):
-        self.assertTrue(dict, type(Amenity().to_dict()))
+    def test_str(self):
+        """Test that str method returns expected string."""
+        my_amenity = Amenity()
+        expected = "[{}] ({}) {}".format(my_amenity.__class__.__name__, my_amenity.id, my_amenity.__dict__)
+        self.assertEqual(str(my_amenity), expected)
 
-    def test_to_dict_contains_correct_keys(self):
-        am = Amenity()
-        self.assertIn("id", am.to_dict())
-        self.assertIn("created_at", am.to_dict())
-        self.assertIn("updated_at", am.to_dict())
-        self.assertIn("__class__", am.to_dict())
+    def test_save(self):
+        """Test that save method updates updated_at attribute."""
+        my_amenity = Amenity()
+        created_at = my_amenity.created_at
+        updated_at = my_amenity.updated_at
+        my_amenity.save()
+        self.assertNotEqual(updated_at, my_amenity.updated_at)
+        self.assertEqual(created_at, my_amenity.created_at)
 
-    def test_to_dict_contains_added_attributes(self):
-        am = Amenity()
-        am.middle_name = "Holberton"
-        am.my_number = 98
-        self.assertEqual("Holberton", am.middle_name)
-        self.assertIn("my_number", am.to_dict())
-
-    def test_to_dict_datetime_attributes_are_strs(self):
-        am = Amenity()
-        am_dict = am.to_dict()
-        self.assertEqual(str, type(am_dict["id"]))
-        self.assertEqual(str, type(am_dict["created_at"]))
-        self.assertEqual(str, type(am_dict["updated_at"]))
-
-    def test_contrast_to_dict_dunder_dict(self):
-        am = Amenity()
-        self.assertNotEqual(am.to_dict(), am.__dict__)
-
-    def test_to_dict_with_arg(self):
-        am = Amenity()
-        with self.assertRaises(TypeError):
-            am.to_dict(None)
+    def test_to_dict(self):
+        """Test that to_dict method returns expected dictionary."""
+        my_amenity = Amenity()
+        my_amenity.name = "wifi"
+        my_amenity_dict = my_amenity.to_dict()
+        expected_dict = {
+            'id': my_amenity.id,
+            'created_at': my_amenity.created_at.isoformat(),
+            'updated_at': my_amenity.updated_at.isoformat(),
+            '__class__': 'Amenity',
+            'name': 'wifi'
+        }
+        self.assertDictEqual(my_amenity_dict, expected_dict)
 
 
 if __name__ == '__main__':
