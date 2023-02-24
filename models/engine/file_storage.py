@@ -27,14 +27,12 @@ class FileStorage:
             json.dump(obj_dict, file)
 
     def reload(self):
-        """Deserializes the JSON file to __objects"""
+        """ reload the object from the JSON file (path: __file_path ) """
         try:
-            with open(FileStorage.__file_path, 'r') as f:
-                json_dict = json.load(f)
-            for key, value in json_dict.items():
-                module_name, class_name = key.split('.')
-                module = __import__('models.' + module_name, fromlist=[module_name])
-                cls = getattr(module, class_name)
-                self.__objects[key] = cls(**value)
-        except FileNotFoundError:
+            with open(self.__file_path, 'r') as f:
+                dict = json.loads(f.read())
+                for value in dict.values():
+                    cls = value["__class__"]
+                    self.new(eval(cls)(**value))
+        except Exception:
             pass
