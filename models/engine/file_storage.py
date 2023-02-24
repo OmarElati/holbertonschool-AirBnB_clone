@@ -6,6 +6,7 @@ This module defines the FileStorage class
 import json
 import os
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -17,7 +18,8 @@ class FileStorage:
     __objects = {}
 
     classes = {
-        'BaseModel': BaseModel
+        'BaseModel': BaseModel,
+        'User' : User
     }
 
     def all(self):
@@ -58,3 +60,23 @@ class FileStorage:
                 cls_name = value['__class__']
                 if cls_name in self.classes:
                     self.__objects[key] = self.classes[cls_name](**value)
+
+    def _deserialize(self, obj):
+        """Deserialize JSON dict to Python object."""
+        if '__class__' in obj:
+            class_name = obj['__class__']
+            if class_name == 'User':
+                obj = User(**obj)
+            else:
+                obj = self.classes[class_name](**obj)
+        return obj
+        
+    def _serialize(self, obj):
+        """Serialize Python object to JSON dict."""
+        if isinstance(obj, User):
+            obj_dict = obj.to_dict()
+            obj_dict['__class__'] = 'User'
+        else:
+            obj_dict = obj.to_dict()
+            obj_dict['__class__'] = obj.__class__.__name__
+        return obj_dict
