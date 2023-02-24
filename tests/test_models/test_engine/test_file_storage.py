@@ -27,6 +27,13 @@ class TestFileStorage(unittest.TestCase):
         """Test that __file_path is not None"""
         self.assertIsNotNone(FileStorage._FileStorage__file_path)
 
+    def test_all(self):
+        """Test that all() method returns dictionary of all objects"""
+        objects = FileStorage().all()
+        self.assertEqual(type(objects), dict)
+        key = '{}.{}'.format(type(self.my_model).__name__, self.my_model.id)
+        self.assertIn(key, objects.keys())
+
     def test_objects_dict_exists(self):
         """Test that __objects is not None"""
         self.assertIsNotNone(FileStorage._FileStorage__objects)
