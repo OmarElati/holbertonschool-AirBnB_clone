@@ -29,10 +29,8 @@ class BaseModel:
         models.storage.save()
 
     def to_dict(self):
-        obj_dict = dict(self.__dict__)
-        obj_dict['__class__'] = self.__class__.__name__
-        obj_dict['created_at'] = self.created_at.isoformat()
-        obj_dict['updated_at'] = self.updated_at.isoformat()
-        if '_sa_instance_state' in obj_dict:
-            del obj_dict['_sa_instance_state']
+        obj_dict = self.__dict__.copy()
+        obj_dict["__class__"] = self.__class__.__name__
+        obj_dict["created_at"] = obj_dict["created_at"].isoformat()
+        obj_dict["updated_at"] = obj_dict["updated_at"].isoformat()
         return obj_dict
