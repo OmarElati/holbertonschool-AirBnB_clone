@@ -1,40 +1,60 @@
 #!/usr/bin/python3
-"""Defines the FileStorage class."""
-import models
+"""
+This module defines the FileStorage class
+"""
+
 import json
+import os
 from models.base_model import BaseModel
 
 
 class FileStorage:
+    """
+    This class defines the FileStorage engine for AirBnB
+    """
+
     __file_path = "file.json"
     __objects = {}
 
+    classes = {
+        'BaseModel': BaseModel
+    }
+
     def all(self):
-        """Returns the dictionary __objects"""
-        return FileStorage.__objects
+        """
+        Returns the dictionary __objects
+        """
+        return self.__objects
 
     def new(self, obj):
-        """Sets in __objects the obj with key <obj class name>.id"""
-        key = obj.__class__.__name__ + "." + str(obj.id)
-        FileStorage.__objects[key] = obj
+        """
+        Sets in __objects the obj with key <obj class name>.id
+        """
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        self.__objects[key] = obj
 
     def save(self):
-        """Serializes __objects to the JSON file (path: __file_path)"""
-        obj_dict = {}
-        for key, value in FileStorage.__objects.items():
-            obj_dict[key] = value.to_dict()
-        with open(FileStorage.__file_path, mode="w", encoding="utf-8") as file:
-            json.dump(obj_dict, file)
+        """
+        Serializes __objects to the JSON file (path: __file_path)
+        """
+        json_dict = {}
+        for key, value in self.__objects.items():
+            json_dict[key] = value.to_dict()
+
+        with open(self.__file_path, mode="w", encoding="utf-8") as f:
+            json.dump(json_dict, f)
 
     def reload(self):
-        """Deserializes the JSON file to __objects"""
-        try:
-            with open(self.__file_path, mode='r') as f:
-                objs_dict = json.load(f)
-            for obj_id, obj in objs_dict.items():
-                cls_name = obj['__class__']
-                cls = models.classes[cls_name]
-                instance = cls(**obj)
-                models.storage.new(instance)
-        except FileNotFoundError:
-            pass
+        """
+        Deserializes the JSON file to __objects (only if the JSON file
+        (__file_path) exists ; otherwise, do nothing. If the file doesn’t
+        exist, no exception should be raised)
+        """
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, mode="r", encoding="utf-8") as f:
+                json_dict = json.load(f)
+
+            for key, value in json_dict.items():
+                cls_name = value['__class__']
+                if cls_name in self.classes:
+                    self.__objects[key] = self.classes[cls_name](**value)
