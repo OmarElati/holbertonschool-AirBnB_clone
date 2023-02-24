@@ -2,6 +2,7 @@
 """Unittest for FileStorage"""
 import os
 import json
+import models
 import unittest
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
@@ -74,6 +75,12 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(len(self.storage.all()), 1)
         self.assertIn(obj_key, self.storage.all().keys())
         self.assertIn(obj, self.storage.all().values())
+    def test_reload_no_file(self):
+        self.assertRaises(FileNotFoundError, models.storage.reload())
+
+    def test_reload_with_arg(self):
+        with self.assertRaises(TypeError):
+            models.storage.reload(None)
 
 
 if __name__ == '__main__':
