@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import json
+import importlib
 
 
 class FileStorage:
@@ -30,7 +31,7 @@ class FileStorage:
                 obj_dict = json.load(file)
                 for key, value in obj_dict.items():
                     cls_name, obj_id = key.split('.')
-                    module = __import__('models.' + cls_name, fromlist=[cls_name])
+                    module = importlib.import_module('models.' + cls_name)
                     cls = getattr(module, cls_name)
                     obj = cls(**value)
                     self.new(obj)
