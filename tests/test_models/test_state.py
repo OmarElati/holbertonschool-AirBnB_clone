@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-"""
-    This module contains test cases for State
-"""
+""" This module contains test cases for State. """
+
 import unittest
 from models.state import State
 from models import storage
