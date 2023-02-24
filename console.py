@@ -9,19 +9,23 @@ from models import storage
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
-    prompt = "(hbnb) "
+    prompt = '(hbnb) '
+    classes = {
+        "BaseModel",
+        "User",
+    }
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel"""
+        """ Creates a new instance of BaseModel """
         if not arg:
             print("** class name missing **")
             return
-        if arg not in self.classes:
+        if arg not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_object = self.classes[arg]()
-        new_object.save()
-        print(new_object.id)
+        new_instance = HBNBCommand.classes[arg]()
+        new_instance.save()
+        print(new_instance.id)
 
     def do_show(self, arg):
         """Prints the string representation of an instance"""
