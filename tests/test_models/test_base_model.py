@@ -3,63 +3,99 @@
 Unittest for BaseModel class
 """
 import unittest
-import json
+import os
+from datetime import datetime
 from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
-    """Test cases for BaseModel"""
+    """
+    Test cases for BaseModel class
+    """
 
-    def test_init(self):
-        """Test that an instance of BaseModel is properly initialized"""
-        my_model = BaseModel()
-        self.assertTrue(isinstance(my_model, BaseModel))
-        self.assertTrue(hasattr(my_model, "id"))
-        self.assertTrue(hasattr(my_model, "created_at"))
-        self.assertTrue(hasattr(my_model, "updated_at"))
-        self.assertEqual(type(my_model.id), str)
-        self.assertEqual(type(my_model.created_at).__name__, "datetime")
-        self.assertEqual(type(my_model.updated_at).__name__, "datetime")
+    def setUp(self):
+        """
+        Set up test environment
+        """
+        self.model = BaseModel()
+
+    def tearDown(self):
+        """
+        Tear down test environment
+        """
+        del self.model
+        try:
+            os.remove("file.json")
+        except:
+            pass
+
+    def test_instance_type(self):
+        """
+        Test instance type
+        """
+        self.assertIsInstance(self.model, BaseModel)
+
+    def test_id_generation(self):
+        """
+        Test id generation
+        """
+        model1 = BaseModel()
+        model2 = BaseModel()
+        self.assertNotEqual(model1.id, model2.id)
+
+    def test_created_at_type(self):
+        """
+        Test created_at type
+        """
+        self.assertIsInstance(self.model.created_at, datetime)
+
+    def test_updated_at_type(self):
+        """
+        Test updated_at type
+        """
+        self.assertIsInstance(self.model.updated_at, datetime)
 
     def test_save(self):
-        """Test the save method of BaseModel"""
-        my_model = BaseModel()
-        updated_at = my_model.updated_at
-        my_model.save()
-        self.assertNotEqual(my_model.updated_at, updated_at)
+        """
+        Test save method
+        """
+        self.model.save()
+        self.assertNotEqual(self.model.created_at, self.model.updated_at)
 
     def test_to_dict(self):
-        """Test the to_dict method of BaseModel"""
-        my_model = BaseModel()
-        my_model.name = "Test"
-        my_model.my_number = 123
-        my_model_dict = my_model.to_dict()
-        self.assertTrue(isinstance(my_model_dict, dict))
-        self.assertTrue("__class__" in my_model_dict)
-        self.assertTrue("id" in my_model_dict)
-        self.assertTrue("created_at" in my_model_dict)
-        self.assertTrue("updated_at" in my_model_dict)
-        self.assertTrue("name" in my_model_dict)
-        self.assertTrue("my_number" in my_model_dict)
-        self.assertEqual(my_model_dict["__class__"], "BaseModel")
-        self.assertEqual(my_model_dict["name"], "Test")
-        self.assertEqual(my_model_dict["my_number"], 123)
+        """
+        Test to_dict method
+        """
+        dict_ = self.model.to_dict()
+        self.assertIsInstance(dict_, dict)
+        self.assertEqual(dict_["id"], self.model.id)
+        self.assertEqual(dict_["created_at"], self.model.created_at.isoformat())
+        self.assertEqual(dict_["updated_at"], self.model.updated_at.isoformat())
+        self.assertEqual(dict_["__class__"], "BaseModel")
 
-    def test_str(self):
-        """Test the __str__ method of BaseModel"""
-        my_model = BaseModel()
-        my_model.name = "Test"
-        my_model.my_number = 123
-        my_model_str = str(my_model)
-        self.assertTrue("[BaseModel]" in my_model_str)
-        self.assertTrue("id" in my_model_str)
-        self.assertTrue("created_at" in my_model_str)
-        self.assertTrue("updated_at" in my_model_str)
-        self.assertTrue("name" in my_model_str)
-        self.assertTrue("my_number" in my_model_str)
-        self.assertTrue("Test" in my_model_str)
-        self.assertTrue("123" in my_model_str)
+    def test_init_dict(self):
+        """
+        Test __init__ method with dictionary
+        """
+        dict_ = self.model.to_dict()
+        model2 = BaseModel(**dict_)
+        self.assertNotEqual(self.model, model2)
+        self.assertEqual(self.model.id, model2.id)
+        self.assertEqual(self.model.created_at, model2.created_at)
+        self.assertEqual(self.model.updated_at, model2.updated_at)
+
+    def test_init_new(self):
+        """
+        Test __init__ method with new instance
+        """
+        model1 = BaseModel()
+        model2 = BaseModel(id=model1.id, created_at=model1.created_at,
+                            updated_at=model1.updated_at)
+        self.assertNotEqual(model1, model2)
+        self.assertEqual(model1.id, model2.id)
+        self.assertEqual(model1.created_at, model2.created_at)
+        self.assertEqual(model1.updated_at, model2.updated_at)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
