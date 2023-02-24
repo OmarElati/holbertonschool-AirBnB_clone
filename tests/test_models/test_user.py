@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-Defines unittests for user.py.
-"""
+""" Defines unittests for user.py. """
 
 import os
 import models
