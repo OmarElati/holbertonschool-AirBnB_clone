@@ -52,5 +52,43 @@ class TestFileStorage(unittest.TestCase):
         FileStorage().reload()
         self.assertIn(key, FileStorage._FileStorage__objects.keys())
 
+    def test_reload_create_instance(self):
+        """Test that reload method creates an instance of the stored class"""
+        my_model = BaseModel()
+        my_model.save()
+        FileStorage().reload()
+        key = '{}.{}'.format(type(my_model).__name__, my_model.id)
+        obj = FileStorage._FileStorage__objects.get(key)
+        self.assertIsNotNone(obj)
+        self.assertEqual(obj.id, my_model.id)
+
+    def test_reload_create_instance_with_dict(self):
+        """Test that reload method creates instance from dictionary"""
+        my_model = BaseModel()
+        my_model.save()
+        FileStorage().reload()
+        key = '{}.{}'.format(type(my_model).__name__, my_model.id)
+        obj = FileStorage._FileStorage__objects.get(key)
+        obj_dict = obj.to_dict()
+        new_obj = BaseModel(**obj_dict)
+        self.assertIsNotNone(new_obj)
+        self.assertEqual(new_obj.id, my_model.id)
+
+    def test_reload_all(self):
+        """Test that reload method loads all objects"""
+        my_model1 = BaseModel()
+        my_model1.save()
+        my_model2 = BaseModel()
+        my_model2.save()
+        FileStorage().reload()
+        key1 = '{}.{}'.format(type(my_model1).__name__, my_model1.id)
+        obj1 = FileStorage._FileStorage__objects.get(key1)
+        key2 = '{}.{}'.format(type(my_model2).__name__, my_model2.id)
+        obj2 = FileStorage._FileStorage__objects.get(key2)
+        self.assertIsNotNone(obj1)
+        self.assertEqual(obj1.id, my_model1.id)
+        self.assertIsNotNone(obj2)
+        self.assertEqual(obj2.id, my_model2.id)
+
 if __name__ == '__main__':
     unittest.main()
