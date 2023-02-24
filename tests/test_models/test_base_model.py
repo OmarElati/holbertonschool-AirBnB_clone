@@ -60,6 +60,19 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue("Test" in my_model_str)
         self.assertTrue("123" in my_model_str)
 
+    def test_base_model_dict():
+        """Test creating a BaseModel instance from a dictionary representation"""
+        my_model = BaseModel()
+        my_model.name = "My_First_Model"
+        my_model.my_number = 89
+        my_model_json = my_model.to_dict()
+        my_new_model = BaseModel(**my_model_json)
+        assert my_new_model.id == my_model.id
+        assert my_new_model.created_at == my_model.created_at
+        assert my_new_model.updated_at == my_model.updated_at
+        assert my_new_model.name == my_model.name
+        assert my_new_model.my_number == my_model.my_number
+
 
 if __name__ == '__main__':
     unittest.main()
