@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+#!/usr/bin/python3
 import models
 from datetime import datetime
 import uuid
@@ -31,6 +32,10 @@ class BaseModel:
     def to_dict(self):
         obj_dict = self.__dict__.copy()
         obj_dict["__class__"] = self.__class__.__name__
-        obj_dict["created_at"] = obj_dict["created_at"].isoformat()
-        obj_dict["updated_at"] = obj_dict["updated_at"].isoformat()
+        if isinstance(obj_dict["created_at"], datetime):
+            obj_dict["created_at"] = obj_dict["created_at"].isoformat()
+        if isinstance(obj_dict["updated_at"], datetime):
+            obj_dict["updated_at"] = obj_dict["updated_at"].isoformat()
         return obj_dict
+
+    first_name = ""

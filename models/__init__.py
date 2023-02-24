@@ -4,3 +4,5 @@ from models.base_model import BaseModel
 
 storage = FileStorage()
 storage.reload()
+
+models_classes = {"BaseModel": BaseModel}
