@@ -21,7 +21,8 @@ class TestConsole(unittest.TestCase):
         sys.stdout = sys.__stdout__
 
 class TestHBNBCommand_quit(unittest.TestCase):
-    """Unittests for testing exiting from the HBNB command interpreter."""
+    """Unittests for testing exiting
+    from the HBNB command interpreter."""
 
     def test_quit_exits(self):
         with patch("sys.stdout", new=StringIO()) as output:
