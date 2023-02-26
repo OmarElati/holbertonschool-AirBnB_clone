@@ -9,19 +9,16 @@ This project is a command-line interface for an AirBnB clone. It allows users to
 - Clone the repository from GitHub:
 
 ```bash
-
 git clone https://github.com/OmarElati/holbertonschool-AirBnB_clone.git
 ```
 - Navigate into the directory:
 
 ```bash
-
 cd holbertonschool-AirBnB_clone
 ```
 - Start the command interpreter:
 
 ```pyhton
-
 ./console.py
 ```
 ## How to Use the Command Interpreter
@@ -32,7 +29,6 @@ create
 ### Create a new object of a given class:
 
 ```pyhton
-
 (hbnb) create <class name>
 ```
 ### show
@@ -40,7 +36,6 @@ create
 - Display information about a specific object:
 
 ```python
-
 (hbnb) show <class name> <object id>
 ```
 ### update
@@ -48,7 +43,6 @@ create
 - Update an object's attributes:
 
 ```python
-
 (hbnb) update <class name> <object id> <attribute name> "<attribute value>"
 ```
 ### destroy
@@ -56,7 +50,6 @@ create
 - Delete a specific object:
 
 ```python
-
 (hbnb) destroy <class name> <object id>
 ```
 ### all
@@ -64,7 +57,6 @@ create
 - Display all objects of a given class or all objects in general:
 
 ```python
-
 (hbnb) all <class name>
 ```
 ### Examples
@@ -74,31 +66,26 @@ create
 - Create a new User object:
 
 ```sql
-
 (hbnb) create User
 ```
 - Display information about a specific User object:
 
 ```sql
-
 (hbnb) show User 1234-1234-1234
 ```
 - Update a User object's email attribute:
 
 ```sql
-
 (hbnb) update User 1234-1234-1234 email "5796@holbertonstudents.com"
 ```
 - Delete a User object:
 
 ```scss
-
 (hbnb) destroy User 1234-1234-1234
 ```
 - Display all objects of the User class:
 
 ```scss
-
 (hbnb) all User
 ```
 Authors
