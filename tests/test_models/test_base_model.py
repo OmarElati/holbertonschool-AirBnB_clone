@@ -65,6 +65,7 @@ class TestBaseModel_instantiation(unittest.TestCase):
         with self.assertRaises(TypeError):
             BaseModel(id=None, created_at=None, updated_at=None)
 
+
 class Test_BaseModel_to_dict(unittest.TestCase):
     """Unittests for testing to_dict method of the BaseModel class."""
 
@@ -113,6 +114,7 @@ class Test_BaseModel_to_dict(unittest.TestCase):
         bm = BaseModel()
         with self.assertRaises(TypeError):
             bm.to_dict(None)
+
 
 class TestBaseModel_save(unittest.TestCase):
     """Unittests for testing save method of the BaseModel class."""
