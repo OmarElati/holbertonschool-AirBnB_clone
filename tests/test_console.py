@@ -32,5 +32,6 @@ class TestHBNBCommand_quit(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertTrue(HBNBCommand().onecmd("EOF"))
 
+
 if __name__ == '__main__':
     unittest.main()
