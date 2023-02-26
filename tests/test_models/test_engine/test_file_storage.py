@@ -97,5 +97,6 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNotNone(obj2)
         self.assertEqual(obj2.id, my_model2.id)
 
+
 if __name__ == '__main__':
     unittest.main()
